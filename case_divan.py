@@ -7,12 +7,12 @@ BASE_URL = "https://www.divan.ru/category/divany/page-"
 OUTPUT_FILE = "divan_prices.csv"
 
 def get_price(price_tag):
-    """Обрабатывает цену: убирает символ рубля и пробелы, преобразует в int."""
+    # Обрабатывает цену: убирает символ рубля и пробелы, преобразует в int.
     price_text = price_tag.text.replace("руб.", "").replace(" ", "").strip()
     return int(price_text)
 
 def scrape_page(page_number):
-    """Парсит страницу и возвращает список цен."""
+    # Парсит страницу и возвращает список цен.
     url = f"{BASE_URL}{page_number}"
     response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
 
@@ -33,7 +33,7 @@ def scrape_page(page_number):
     return prices
 
 def read_prices(filename):
-    """Читает цены из CSV-файла и возвращает список."""
+    # Читает цены из CSV-файла и возвращает список.
     prices = []
     with open(filename, newline="", encoding="utf-8") as f:
         reader = csv.reader(f)
@@ -46,7 +46,7 @@ def read_prices(filename):
     return prices
 
 def plot_histogram(prices):
-    """Рисует гистограмму цен."""
+    # Рисует гистограмму цен.
     plt.figure(figsize=(10, 5))
     plt.hist(prices, bins=20, edgecolor="black", alpha=0.7)
     plt.xlabel("Цена (руб.)")
@@ -56,12 +56,12 @@ def plot_histogram(prices):
     plt.show()
 
 def main():
-    """Парсит цены и сохраняет их в CSV после каждой страницы."""
+    # Парсит цены и сохраняет их в CSV после каждой страницы.
     with open(OUTPUT_FILE, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["Цена"])  # Записываем заголовок CSV
 
-        for page in range(1, 68):  # 67 страниц включительно
+        for page in range(1, 10):  # 67 страниц. Ограничим до 10, чтобы не тратить время
             print(f"Парсим страницу {page}...")
             prices = scrape_page(page)
             for price in prices:
